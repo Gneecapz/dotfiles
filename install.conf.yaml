@@ -1,0 +1,15 @@
+- defaults:
+    link:
+      relink: true
+
+- clean: ['~']
+
+- link:
+    ~/.bashrc: dots/bashrc
+    ~/.nanorc: dots/nanorc
+    ~/.config/fastfetch: dots/config/fastfetch
+    ~/.config/picom: dots/config/picom
+    ~/.config/starship.toml: dots/config/starship.toml
+
+- shell:
+    - [git submodule update --init --recursive, Installing Submodules]
