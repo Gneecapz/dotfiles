@@ -58,7 +58,7 @@ if [[ $iatest -gt 0 ]]; then bind "set show-all-if-ambiguous On"; fi
 
 # Set the default editor
 export EDITOR=nano
-export VISUAL=notepadpp
+export VISUAL=leafpad
 
 # Replace batcat with cat on Fedora as batcat is not available as a RPM in any form
 if command -v lsb_release >/dev/null; then
@@ -112,6 +112,8 @@ alias mediamanager='ssh mediamanager.home -l gneecapz'
 # mount -o loop /home/NAMEOFISO.iso /home/ISOMOUNTDIR/
 # umount /home/NAMEOFISO.iso
 # (Both commands done as root only.)
+
+alias xtail='tail -f ~/.local/share/sddm/xorg-session.log'
 
 #######################################################
 # GENERAL ALIAS'S
@@ -216,6 +218,7 @@ alias rebootsafe='sudo shutdown -r now'
 alias rebootforce='sudo shutdown -r -n now'
 
 # Alias's to show disk space and space used in a folder
+alias disk="dysk -c disk+filesystem+type+size+free+used+use+mount+label -s type --units binary -f remote=false"
 alias diskspace="du -S | sort -n -r |more"
 alias folders='du -h --max-depth=1'
 alias folderssort='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
@@ -283,24 +286,24 @@ ftext() {
 }
 
 # Copy file with a progress bar
-cpp() {
-	set -e
-	strace -q -ewrite cp -- "${1}" "${2}" 2>&1 |
-		awk '{
-	count += $NF
-	if (count % 10 == 0) {
-		percent = count / total_size * 100
-		printf "%3d%% [", percent
-		for (i=0;i<=percent;i++)
-			printf "="
-			printf ">"
-			for (i=percent;i<100;i++)
-				printf " "
-				printf "]\r"
-			}
-		}
-	END { print "" }' total_size="$(stat -c '%s' "${1}")" count=0
-}
+#cpp() {
+#	set -e
+#	strace -q -ewrite cp -- "${1}" "${2}" 2>&1 |
+#		awk '{
+#	count += $NF
+#	if (count % 10 == 0) {
+#		percent = count / total_size * 100
+#		printf "%3d%% [", percent
+#		for (i=0;i<=percent;i++)
+#			printf "="
+#			printf ">"
+#			for (i=percent;i<100;i++)
+#				printf " "
+#				printf "]\r"
+#			}
+#		}
+#	END { print "" }' total_size="$(stat -c '%s' "${1}")" count=0
+#}
 
 # Copy and go to the directory
 cpg() {
@@ -544,3 +547,7 @@ export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin:/var/lib/flatpak/exports/bi
 # Install Starship - curl -sS https://starship.rs/install.sh | sh
 eval "$(starship init bash)"
 eval "$(zoxide init bash)"
+
+if [[ $- == *i* ]]; then
+ exec fish
+fi
